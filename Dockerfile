@@ -19,7 +19,7 @@ RUN npm run build -- --configuration production
 FROM nginx:1.23-alpine
 
 # Copy the build output to replace the default nginx contents
-COPY --from=build /app/dist/simple-angular-app /usr/share/nginx/html
+COPY --from=build /app/dist/angularui /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
