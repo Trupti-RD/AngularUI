@@ -1,5 +1,5 @@
 # Stage 1: Build the Angular application
-FROM node:20 as build
+FROM node:22 as build
 
 WORKDIR /app
 
@@ -21,8 +21,8 @@ FROM nginx:1.23-alpine
 # Copy the build output to replace the default nginx contents
 COPY --from=build /app/dist/angularui /usr/share/nginx/html
 
-# Expose port 80
-EXPOSE 80
+# Expose port 8080
+EXPOSE 8080
 
 # Start Nginx server
 CMD ["nginx", "-g", "daemon off;"]
