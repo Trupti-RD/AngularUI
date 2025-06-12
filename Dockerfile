@@ -1,28 +1,29 @@
-# Stage 1: Build the Angular application
+# Stage 1: Build the Angular app
 FROM node:22 as build
 
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Copy package files and install dependencies
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install
 
-# Copy the rest of the application code
+# Copy all source files
 COPY . .
 
-# Build the application
-RUN npm run build
+# Build the Angular app in production mode
+RUN npm run build -- --prod
 
-# Stage 2: Serve the application using Nginx
-FROM nginx:1.23-alpine
+# Stage 2: Serve with Nginx
+FROM nginx:alpine
 
-# Copy the build output to replace the default nginx contents
+# Remove default nginx static assets
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy built Angular app from Stage 1
 COPY --from=build /app/dist/angularui /usr/share/nginx/html
 
-# Expose port 8080
-EXPOSE 8080
+# Expose port 80
+EXPOSE 80
 
-# Start Nginx server
+# Start nginx
 CMD ["nginx", "-g", "daemon off;"]
